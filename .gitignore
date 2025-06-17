@@ -1,0 +1,18 @@
+# Global ignores
+node_modules/
+.env
+.env.local
+.DS_Store
+.vscode/
+
+# Build folders
+dist/
+build/
+
+# Ignore logs
+*.log
+npm-debug.log*
+
+# Ignore client and server specific files if needed
+client/node_modules/
+server/node_modules/
