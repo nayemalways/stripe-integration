@@ -98,8 +98,8 @@ export const payment = async (req, res, next) => {
                 }
             ],
             mode: "payment",    
-            success_url: "http://localhost:5173/payment_success",
-            cancel_url: "http://localhost:5173/payment_cancel",
+            success_url: "https://stripe-client-kappa.vercel.app/payment_success",
+            cancel_url: "https://stripe-client-kappa.vercel.app/payment_cancel",
         });
 
         res.status(202).json(session.url);
