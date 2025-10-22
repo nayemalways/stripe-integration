@@ -23,6 +23,9 @@ export const URL_ENCODED = true;
 export const REQUEST_LIMIT_TIME = process.env.REQUEST_LIMIT_TIME;
 export const REQUEST_LIMIT_NUMER = process.env.REQUEST_LIMIT_NUMER;
 
+// STRIPE INFO
+export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+export const STRIPE_PUBLISH_KEY = process.env.STRIPE_PUBLISH_KEY;
 
 // WEB CACHE
 export const WEB_CACHE = false;
