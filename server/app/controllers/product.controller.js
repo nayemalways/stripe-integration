@@ -17,6 +17,7 @@ export const createProduct = async (req, res, next) => {
     const savedProduct = await newProduct.save();
 
     res.status(201).json({
+      success: true,
       message: 'Product created successfully',
       product: savedProduct
     });
@@ -59,7 +60,7 @@ export const updateProduct = async (req, res, next) => {
       { new: true, runValidators: true }
     );
     if (!updatedProduct) return res.status(404).json({ message: 'Product not found' });
-    res.status(200).json(updatedProduct);
+    res.status(200).json({success: true, message: "Product updated", data: updatedProduct});
   } catch (error) {
     console.error(error);
     next(error);
@@ -71,7 +72,7 @@ export const deleteProduct = async (req, res, next) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.productId);
     if (!deletedProduct) return res.status(404).json({ message: 'Product not found' });
-    res.status(200).json({ message: 'Product deleted successfully' });
+    res.status(200).json({ success: true, message: 'Product deleted successfully' });
   } catch (error) {
     console.error(error);
     next(error);

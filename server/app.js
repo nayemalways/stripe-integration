@@ -16,7 +16,9 @@ const app = express();
 
 
 // GLOBAL APPLICATIONS MIDDLEWARES
-app.use(cors());
+app.use(cors({
+    origin:"https://stripe-client-kappa.vercel.app"
+}));
 app.use(helmet());
 app.use(cookieParser());
 app.use(hpp());
