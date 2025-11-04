@@ -7,17 +7,33 @@ import cookieParser from "cookie-parser";
 import hpp from "hpp";
 import router from "./routes/api.js";
 import { REQUEST_LIMIT_TIME, REQUEST_LIMIT_NUMER, MAX_JSON_SIZE, URL_ENCODED, WEB_CACHE } from './app/config/config.js';
+import http from 'http';
+import { Server } from "socket.io";
 import dotenv from "dotenv";
+ 
  dotenv.config();
 
 
 // EXPRESS APP CREATE
 const app = express();
+const server = http.createServer(app);
+export const io = new Server(server, {
+    cors: "http://localhost:5173"
+})
 
+io.on("connection", (socket) => {
+    console.log("New user connected", socket.id);
+
+
+    socket.on("disconnect", () => {
+        console.log("Client disconnected", socket.id);
+    })
+})
 
 // GLOBAL APPLICATIONS MIDDLEWARES
 app.use(cors({
     origin:"https://stripe-client-kappa.vercel.app"
+    // origin: "http://localhost:5173"
 }));
 app.use(helmet());
 app.use(cookieParser());
@@ -53,4 +69,4 @@ app.use((err, req, res, next) => {
 
 
 
-export default app;
+export default server;

@@ -3,7 +3,6 @@ import { PORT } from "./app/config/config.js";
 import connectDB from "./connection/database.js";
 
 
-
 const Bootstrap = () => {
     // MONGODB CONNECTION
     connectDB();
