@@ -1,58 +1,40 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
 import Layout from "../Layout/Layout";
-import toast from "react-hot-toast";
+import { useContext, useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { SquarePen, Trash } from "lucide-react";
+import { AppContext } from "../context/AppContext";
 
 const ProductUpdate = () => {
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
-
-  const { id } = useParams();
+  const { productDetails, updateProduct } = useContext(AppContext);
+  const [productData, setProductData] = useState({});
+  const { id } = useParams(); // Product Id
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`http://localhost:3000/api/product/${id}`);
-      const data = await res.json();
-      setTitle(data?.data?.title);
-      setPrice(data?.data?.price);
-      setImage(data?.data?.image);
+      const data = await productDetails(id);
+      setProductData(data);
     })();
   }, [id]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !price || !image) {
+    if (!productData.title || !productData.price || !productData.image) {
       alert("All fields are required");
       return;
     }
 
-    const productData = {
-      title,
-      price: Number(price),
-      image,
+    const payload = {
+      title: productData.title,
+      price: Number(productData.price),
+      image: productData.image,
     };
 
-    const uploadProduct = await fetch(
-      `http://localhost:3000/api/product/${id}`,
-      {
-        body: JSON.stringify(productData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "PATCH",
-      }
-    );
+    updateProduct(id, payload);
 
-    const response = await uploadProduct.json();
-    if (!response.success) {
-      toast.error(response.message);
-    }
-
-    toast.success(response.message);
+     
   };
 
   return (
@@ -69,9 +51,11 @@ const ProductUpdate = () => {
                 <label className="block text-gray-700 mb-1">Title</label>
                 <input
                   type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={productData.title}
+                  onChange={(e) =>
+                    setProductData({ ...productData, title: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-none focus:ring-2 focus:ring-pink-500"
                   placeholder="Enter Title"
                 />
               </div>
@@ -80,9 +64,11 @@ const ProductUpdate = () => {
                 <label className="block text-gray-700 mb-1">Price (৳)</label>
                 <input
                   type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={productData.price}
+                  onChange={(e) =>
+                    setProductData({ ...productData, price: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-none focus:ring-2 focus:ring-pink-500"
                   placeholder="Enter Price"
                 />
               </div>
@@ -91,16 +77,18 @@ const ProductUpdate = () => {
                 <label className="block text-gray-700 mb-1">Image URL</label>
                 <input
                   type="text"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="https://example.com/image.jpg"
+                  value={productData.image}
+                  onChange={(e) =>
+                    setProductData({ ...productData, image: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-none focus:ring-2 focus:ring-pink-500"
+                  placeholder="Image url"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+                className="w-full bg-pink-600 text-white py-2 rounded hover:bg-pink-700 transition-colors cursor-pointer"
               >
                 Submit
               </button>
@@ -112,17 +100,17 @@ const ProductUpdate = () => {
         <div className="w-1/2 flex justify-center">
           <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 w-full max-w-sm">
             <img
-              src={image || "https://via.placeholder.com/300"}
-              alt={title || "Product Image"}
+              src={productData.image || "https://via.placeholder.com/300"}
+              alt={productData.title || "Product Image"}
               className="w-full object-cover rounded-t-lg"
             />
             <div className="p-4">
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-lg font-bold mb-2">
-                    {title || "Product Name"}
+                    {productData.title || "Product Name"}
                   </h3>
-                  <p className="text-gray-700 mb-4">৳{price || "0"}</p>
+                  <p className="text-gray-700 mb-4">৳{productData.price || "0"}</p>
                 </div>
               </div>
             </div>

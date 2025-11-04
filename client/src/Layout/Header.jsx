@@ -1,18 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Bell } from "lucide-react";
-import { io } from "socket.io-client";
 import { Link } from 'react-router-dom'
-import { backendURL } from "../constant";
-
-const socket = io(backendURL);
+import { AppContext } from "../context/AppContext";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef(null);
 
-  console.log(notifications);
+  const {unreadCount, notifications } = useContext(AppContext);
 
   // Handle Click outsid of Dropdown
   useEffect(() => {
@@ -29,21 +24,6 @@ const Header = () => {
     };
   }, [notifications]);
 
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(`${backendURL}/notifications`);
-      const data = await res.json();
-      setNotifications(data.data);
-      setUnreadCount(data.data.length);
-    })();
-  }, []);
-
-  useEffect(() => {
-    socket.on("productAddNotification", (notifications) => {
-      console.log(notifications);
-      setNotifications((prev) => [...prev, notifications]);
-    });
-  }, []);
 
   return (
     <header className="bg-pink-600 text-white py-4 shadow">

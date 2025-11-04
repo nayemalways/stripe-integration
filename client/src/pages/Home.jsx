@@ -1,42 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import Layout from "../Layout/Layout";
 import { SquarePen, Trash } from "lucide-react";
-import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
 
-  // Fetch products from your backend
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("http://localhost:3000/api/product");
-        const data = await res.json();
-        setProducts(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
+  const { products, handleDelete } = useContext( AppContext );
  
-
-  const handleDelete = async (productId) => {
-    const res = await fetch(`http://localhost:3000/api/product/${productId}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-
-    if (!data.success) {
-      toast.error(data.message);
-    }
-
-    toast.success(data.message);
-    window.location.href = "/";
-  };
 
   return (
     <Layout>
@@ -45,8 +16,8 @@ const Home = () => {
         <main className="flex-1 container mx-auto px-4 py-8">
           <h2 className="text-3xl font-semibold mb-6">Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products?.data &&
-              products?.data.map((product) => (
+            {products.data &&
+              [...products.data].reverse().map((product) => (
                 <div
                   id={product._id}
                   key={product._id}
@@ -84,7 +55,7 @@ const Home = () => {
                     </div>
                     <Link to={`/product/${product._id}`}
                        
-                      className="bg-pink-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-blue-700 w-full"
+                      className="bg-pink-600 cursor-pointer text-white py-2 px-4 rounded hover:bg-pink-700 w-full"
                     >
                       View Details
                     </Link>

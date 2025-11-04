@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Notification from './notification.model.js';
 
 const productSchema = new mongoose.Schema({
   title: {
@@ -15,6 +16,8 @@ const productSchema = new mongoose.Schema({
     required: true
   },
 }, { timestamps: true });
+
+ 
 
 const Product = mongoose.model('Product', productSchema);
 export default Product;

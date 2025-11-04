@@ -18,7 +18,6 @@ export const createProduct = async (req, res, next) => {
     const newProduct = new Product({ title, price, image });
     const savedProduct = await newProduct.save();
 
-    console.log(savedProduct)
 
     const notificationMessage = {
       productId: savedProduct._id,
@@ -26,7 +25,6 @@ export const createProduct = async (req, res, next) => {
       description: `${savedProduct.title} - is added in the store`,
     };
 
-    console.log(notificationMessage)
 
     const notifications = await Notification.create(notificationMessage);
     io.emit("productAddNotification", notifications);
@@ -94,6 +92,8 @@ export const deleteProduct = async (req, res, next) => {
     );
     if (!deletedProduct)
       return res.status(404).json({ message: "Product not found" });
+    await Notification.deleteOne({ productId: req.params.productId });
+
     res
       .status(200)
       .json({ success: true, message: "Product deleted successfully" });

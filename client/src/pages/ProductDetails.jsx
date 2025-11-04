@@ -1,42 +1,21 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../Layout/Layout";
-import { backendURL } from "../constant";
-
-console.log(backendURL)
+import { AppContext } from "../context/AppContext";
 
 const ProductDetails = () => {
   const { productId } = useParams();
 
-  const [product, setProduct] = useState({});
-
-  console.log(product)
+  const { product, productDetails, checkout } = useContext(AppContext);
 
   useEffect(() => {
-    (async () => {
-      const res = await fetch(`${backendURL}/product/${productId}`);
-      const data = await res.json();
-      setProduct(data.data);
-    })();
+    productDetails(productId);
   }, [productId]);
 
-   const handleCheckout = async () => {
-
-    const payload = {
-      amount: product.price,
-      productName: product.title,
-    };
-
-    const payment = await fetch(`${backendURL}/checkout`, {
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json", // send JSON
-      },
-      method: "POST",
-    });
-
-    const checkoutURL = await payment.json();
-    window.location.href = checkoutURL;
+  const handleCheckout = async () => {
+    const payload = { amount: product.price, productName: product.title };
+    checkout(payload);
   };
 
   if (!product) {
@@ -77,7 +56,7 @@ const ProductDetails = () => {
             {/* Checkout Button */}
             <button
               onClick={handleCheckout}
-              className="w-full bg-pink-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 active:scale-95 transition"
+              className="w-full bg-pink-600 text-white py-2.5 rounded-lg font-medium hover:bg-pink-700 cursor-pointer active:scale-95 transition"
             >
               Checkout
             </button>

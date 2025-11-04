@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import  { useContext, useState } from "react";
 import Layout from "../Layout/Layout";
-import toast from "react-hot-toast";
-import { backendURL } from "../constant";
-
+import { AppContext } from "../context/AppContext";
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+
+  const { addProduct } = useContext(AppContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,29 +17,9 @@ const AddProduct = () => {
       return;
     }
 
-    const productData = {
-      title,
-      price: Number(price),
-      image,
-    };
+    const productData = { title, price: Number(price), image, };
 
-    const uploadProduct = await fetch(
-      `${backendURL}/create_product`,
-      {
-        body: JSON.stringify(productData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      }
-    );
-
-    const response = await uploadProduct.json();
-    if (!response.success) {
-      toast.error(response.message);
-    }
-
-    toast.success(response.message);
+    addProduct(productData)
 
     // Optionally reset the form
     setTitle("");
@@ -59,8 +39,8 @@ const AddProduct = () => {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="I Phone 15"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter product title"
               />
             </div>
 
@@ -70,8 +50,8 @@ const AddProduct = () => {
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="18000"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter product price"
               />
             </div>
 
@@ -81,8 +61,8 @@ const AddProduct = () => {
                 type="text"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="https://example.com/image.jpg"
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                placeholder="Image link"
               />
             </div>
 

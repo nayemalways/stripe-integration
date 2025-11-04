@@ -18,12 +18,17 @@ import dotenv from "dotenv";
 const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {
-    cors: "http://localhost:5173"
+    cors: {
+        origin: ["https://stripe-client-kappa.vercel.app", "http://localhost:5173"]
+    }
 })
 
 io.on("connection", (socket) => {
     console.log("New user connected", socket.id);
 
+    socket.on("msg", (msg) => {
+        console.log(msg);
+    })
 
     socket.on("disconnect", () => {
         console.log("Client disconnected", socket.id);
@@ -32,8 +37,7 @@ io.on("connection", (socket) => {
 
 // GLOBAL APPLICATIONS MIDDLEWARES
 app.use(cors({
-    origin:"https://stripe-client-kappa.vercel.app"
-    // origin: "http://localhost:5173"
+    origin: ["https://stripe-client-kappa.vercel.app", "http://localhost:5173"]
 }));
 app.use(helmet());
 app.use(cookieParser());
