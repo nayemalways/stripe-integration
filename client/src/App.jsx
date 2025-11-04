@@ -4,6 +4,7 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentCancel from './pages/PaymentCancel';
 import AddProduct from './pages/AddProduct';
 import ProductUpdate from './pages/ProductUpdate';
+import ProductDetails from './pages/ProductDetails';
  
 
 
@@ -14,6 +15,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Home />} ></Route>
         <Route path='/add-product' element={<AddProduct />} ></Route>
+        <Route path='/product/:productId' element={<ProductDetails />} ></Route>
         <Route path='/product-update/:id' element={<ProductUpdate />} ></Route>
         <Route path='/payment_success' element={<PaymentSuccess />} ></Route>
         <Route path='/payment_cancel' element={<PaymentCancel />} ></Route>
