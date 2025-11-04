@@ -19,7 +19,7 @@ const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {
     cors: {
-        origin: ["https://stripe-client-kappa.vercel.app", "https://stripe-client-70j1.onrender.com", "http://localhost:5173"]
+        origin:  "https://stripe-client-70j1.onrender.com"
     }
 })
 
