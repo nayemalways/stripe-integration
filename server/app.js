@@ -19,7 +19,7 @@ const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {
     cors: {
-        origin:  "https://stripe-client-70j1.onrender.com"
+        origin: [ "https://stripe-client-70j1.onrender.com", "https://stripe-client-kappa.vercel.app", "http://localhost:5173" ]
     }
 })
 
@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
 
 // GLOBAL APPLICATIONS MIDDLEWARES
 app.use(cors({
-    origin: ["https://stripe-client-kappa.vercel.app", "http://localhost:5173"]
+    origin: [ "https://stripe-client-70j1.onrender.com", "https://stripe-client-kappa.vercel.app", "http://localhost:5173"]
 }));
 app.use(helmet());
 app.use(cookieParser());
